@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Desayuno Express</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                text-align: center;
+            }
+            header {
+                background-color: #d09800;
+                color: white;
+                padding: 10px 0;
+            }
+            .product,
+            .ingredient {
+                display: inline-block;
+                text-align: center;
+                margin: 10px;
+            }
+            button {
+                margin-top: 5px;
+                padding: 5px 10px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            .buy-button {
+                background-color: #28a745;
+                color: white;
+            }
+            .buy-button-block {
+                background-color: #28a745;
+                color: white;
+                width: 60%;
+                margin-top: 3rem;
+            }
+            .customize-button {
+                background-color: #007bff;
+                color: white;
+            }
+            .cancel-customize-button {
+                background-color: #dc3545;
+                color: white;
+                display: none;
+            }
+            .sections-container {
+                display: flex;
+                justify-content: center;
+            }
+            #products-section {
+                width: 30%;
+            }
+            #customize-section {
+                width: 50%;
+                /* display: none; */
+                /* margin-top: 20px; */
+                /* background-color: #f9f9f9; */
+                /* border-top: 2px solid #ddd; */
+            }
+            @media only screen and (max-width: 768px) {
+                .sections-container {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                }
+                #products-section {
+                    width: 100%;
+                }
+                #customize-section {
+                    width: 50%;
+                }
+            }
+            .amount-buttons {
+                /* display: none; */
+            }
+            .ingredient-buttons button {
+                background-color: #ccc;
+                width: 27px;
+            }
+            .ingredient-buttons .add,
+            .amount-buttons .add {
+                background-color: #28a745;
+                color: white;
+            }
+            .ingredient-buttons .remove,
+            .amount-buttons .remove {
+                background-color: #dc3545;
+                color: white;
+            }
+            .ingredient-counter,
+            .amount-counter {
+                width: 24px;
+                text-align: center;
+            }
+            #purchase-buttons {
+                /* display: none; */
+                margin-top: 9px;
+            }
+            .price {
+                font-size: 13.3px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>Desayuno Express</h1>
+        </header>
+
+        <div class="products-container">
+            <div class="sections-container">
+                <section id="products-section">
+                    <h2>Productos</h2>
+                    <div class="product">
+                        <img
+                            src="https://t1.uc.ltmcdn.com/es/posts/0/6/9/como_hacer_un_sandwich_mixto_33960_orig.jpg"
+                            alt="Sándwich 1"
+                            width="150"
+                        />
+                        <p><b>Sándwich Clásico</b></p>
+                        <p>Jamon, jamon, queson, jamon</p>
+                        <p class="price"><i>1.50€</i></p>
+                        <div class="amount-buttons">
+                            <button class="remove" onclick="removeProduct(1, -1)">-</button>
+                            <input id="counter-product1" class="amount-counter" type="text" value="1" />
+                            <button class="add" onclick="addProduct(1, 1)">+</button>
+                        </div>
+                        <!-- <div id="purchase-buttons">
+                            <button class="buy-button" onclick="buyNow()">Comprar</button>
+                            <button
+                                id="customize-sandiwich1"
+                                class="customize-button"
+                                onclick="customize('Sándwich Clásico', 1)"
+                            >
+                                Personalizar
+                            </button>
+                            <button
+                                id="cancel-customize-sandiwich1"
+                                class="cancel-customize-button"
+                                onclick="cancelCustomize(1)"
+                            >
+                                Cancelar
+                            </button>
+                        </div> -->
+                    </div>
+                    <!-- <div class="product">
+                <img
+                    src="https://i.pinimg.com/736x/47/90/df/4790df589fc142864054f601f0f29190.jpg"
+                    alt="Sándwich 2"
+                    width="150"
+                />
+                <p>Sándwich Vegetariano</p>
+                <button class="buy-button" onclick="buyNow('Sándwich Vegetariano')">Comprar</button>
+                <button class="customize-button" onclick="customize('Sándwich Vegetariano')">Personalizar</button>
+                <button class="cancel-customize-button" onclick="customize('Sándwich Vegetariano')">Cacnelar</button>
+            </div> -->
+                    <!-- Agrega más productos según sea necesario -->
+                </section>
+
+                <section id="customize-section">
+                    <h2>Ingredientes <span id="custom-sandwich-name"></span></h2>
+                    <div class="ingredient">
+                        <img
+                            src="https://s03.s3c.es/imag/_v0/1200x655/1/0/2/jamon-codido-iStock-488330599.jpg"
+                            alt="Ham"
+                            width="100"
+                        />
+                        <p>Jamón</p>
+                        <p class="price"><i>0.25€</i></p>
+                        <div class="ingredient-buttons">
+                            <button class="remove" onclick="updateIngredient(1, 'Jamón', -1)">-</button>
+                            <input id="Jamón-counter" class="ingredient-counter" type="text" value="3" />
+                            <button class="add" onclick="updateIngredient(1, 'Jamón', 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="ingredient">
+                        <img
+                            src="https://i0.wp.com/meatlovers.es/wp-content/uploads/queso-sandwich-lonchas_873112.jpg?fit=2000%2C1128&ssl=1"
+                            alt="Queso"
+                            width="100"
+                        />
+                        <p>Queso</p>
+                        <p class="price"><i>0.25€</i></p>
+                        <div class="ingredient-buttons">
+                            <button class="remove" onclick="updateIngredient(1, 'Queso', -1)">-</button>
+                            <input id="Queso-counter" class="ingredient-counter" type="text" value="1" />
+                            <button class="add" onclick="updateIngredient(1, 'Queso', 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="ingredient">
+                        <img
+                            src="https://supercostablanca.es/4066-home_default/heinz-tomato-ketchup-570g.jpg"
+                            alt="Tomate"
+                            width="100"
+                        />
+                        <p>Tomate</p>
+                        <p class="price"><i>0.15€</i></p>
+                        <div class="ingredient-buttons">
+                            <button class="remove" onclick="updateIngredient(1, 'Ketchup', -1)">-</button>
+                            <input id="Ketchup-counter" class="ingredient-counter" type="text" value="0" />
+                            <button class="add" onclick="updateIngredient(1, 'Ketchup', 1)">+</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <button class="buy-button-block" onclick="buyNow()">Hacer pedido</button>
+        </div>
+        <script>
+            let request = {
+                name: 'Andres',
+                products: [
+                    {
+                        id: 1,
+                        name: 'Sándwich Clásico',
+                        description: 'Jamon, jamon, queson, jamon',
+                        amount: 1,
+                        ingredients: { Jamón: 3, Queso: 1 },
+                    },
+                ],
+            };
+
+            const products = [
+                {
+                    id: 1,
+                    name: 'Sándwich Clásico',
+                    description: 'Jamon, jamon, queson, jamon',
+                    ingredients: { Jamón: 3, Queso: 1 },
+                },
+            ];
+
+            function buyNow() {
+                let message = `Hola, te escribe ${request.name},\n`;
+                for (const product of request.products) {
+                    message += `quiero un "${product.name}" con:\n`;
+                    for (const key in product.ingredients) {
+                        const ingredient = product.ingredients[key];
+                        message += `- ${ingredient} de ${key}\n`;
+                    }
+                }
+                const encodedMessage = encodeURIComponent(message);
+                window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
+            }
+
+            function customize(productName, id) {
+                document.getElementById('customize-section').style.display = 'block';
+                document.getElementById('custom-sandwich-name').textContent = productName;
+                document.getElementById('customize-sandiwich' + id).style.display = 'none';
+                document.getElementById('cancel-customize-sandiwich' + id).style.display = 'inline-block';
+            }
+
+            function cancelCustomize(id) {
+                document.getElementById('customize-section').style.display = 'none';
+                document.getElementById('customize-sandiwich' + id).style.display = 'inline-block';
+                document.getElementById('cancel-customize-sandiwich' + id).style.display = 'none';
+                const product = products.find((item) => item.id === id);
+                const requestProduct = request.products.find((item) => item.id === id);
+                requestProduct.ingredients = product.ingredients;
+            }
+
+            function addProduct(id, change) {
+                const requestProduct = request.products.find((item) => item.id === id);
+                if (!requestProduct) {
+                    const p = products.find((item) => item.id);
+                    if (p) request.products.push({ ...p, amount: 1 });
+                } else {
+                    requestProduct.amount += change;
+                }
+                document.getElementById('counter-product' + id).value = requestProduct.amount;
+                // document.getElementById('purchase-buttons').style.display = 'block';
+            }
+
+            function removeProduct(id, change) {
+                const requestProduct = request.products.find((item) => item.id === id);
+                if (requestProduct && requestProduct.amount > 0) {
+                    requestProduct.amount += change;
+                    document.getElementById('counter-product' + id).value = requestProduct.amount;
+                    if (requestProduct.amount === 0) {
+                        const requestProductIndex = request.products.findIndex((item) => item.id === id);
+                        if (requestProductIndex !== -1) {
+                            request.products.splice(requestProductIndex, 1);
+                            // document.getElementById('purchase-buttons').style.display = 'none';
+                        }
+                    }
+                }
+            }
+
+            function updateIngredient(id, ingredient, change) {
+                const requestProduct = request.products.find((item) => item.id === id);
+                if (!requestProduct.ingredients[ingredient]) requestProduct.ingredients[ingredient] = 0;
+                if (requestProduct.ingredients[ingredient] > -1) requestProduct.ingredients[ingredient] += change;
+                document.getElementById(ingredient + '-counter').value = requestProduct.ingredients[ingredient];
+            }
+        </script>
+    </body>
+</html>
